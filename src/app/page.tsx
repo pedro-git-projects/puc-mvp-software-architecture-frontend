@@ -1,3 +1,5 @@
+import Feature from "@/components/home/Feature";
+
 export default function Home() {
-  return <p>TODO!</p>;
+  return <Feature />;
 }
