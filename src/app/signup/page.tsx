@@ -5,5 +5,5 @@ export default function Signup() {
     <div className="flex items-center justify-center min-h-screen">
       <SignupForm />
     </div>
-  )
+  );
 }

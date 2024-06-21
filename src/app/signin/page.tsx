@@ -5,5 +5,5 @@ export default function Signin() {
     <div className="flex items-center justify-center min-h-screen">
       <SigninForm />
     </div>
-  )
+  );
 }
