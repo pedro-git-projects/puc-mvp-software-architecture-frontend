@@ -6,7 +6,7 @@ import Footer from "@/components/ui/Footer";
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Header isAuthenticated={true} />
+      <Header isAuthenticated={false} />
       <main className="flex-grow min-h-screen">{children}</main>
       <Footer />
     </>

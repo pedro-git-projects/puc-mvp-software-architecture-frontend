@@ -69,7 +69,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           {!isAuthenticated ? (
             <>
               <Link
-                href="/login"
+                href="/signin"
                 className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900"
               >
                 Entrar
@@ -126,7 +126,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
                   Cadastrar-se
                 </Link>
                 <Link
-                  href="/login"
+                  href="/signin"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Entrar
