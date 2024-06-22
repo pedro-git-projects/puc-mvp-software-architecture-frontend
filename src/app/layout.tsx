@@ -3,6 +3,7 @@ import "@/styles/tailwind.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Layout } from "@/components/ui/Layout";
+import { Providers } from "@/app/providers/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className="h-full antialiased" suppressHydrationWarning>
       <body className={inter.className}>
-        <Layout>{children}</Layout>
+        <Providers>
+          <Layout>{children}</Layout>
+        </Providers>
       </body>
     </html>
   );

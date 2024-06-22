@@ -5,7 +5,10 @@ import React, { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NAVIGATION } from "@/lib/consts";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import logo from "@/images/logo_alt.svg";
+import Image from "next/image";
+import { useAuth } from "@/app/providers/AuthContext";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -14,16 +17,18 @@ interface HeaderProps {
 export default function Header({ isAuthenticated }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const router = useRouter();
+  const { logout } = useAuth();
 
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      redirect(`/search?query=${query}`);
+      router.push(`/search?query=${query}`);
     }
   };
 
   const handleLogout = () => {
-    console.log("TODO");
-    redirect("/");
+    logout();
+    router.push("/");
   };
 
   return (
@@ -33,38 +38,37 @@ export default function Header({ isAuthenticated }: HeaderProps) {
         aria-label="Global"
       >
         <div className="flex items-center lg:flex-1 gap-x-12">
-          <a href="/" className="-m-1.5 p-1.5">
+          <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Songboxd</span>
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="Songboxd"
-            />
-          </a>
+            <Image className="h-12 w-auto" src={logo} alt="Songboxd" />
+          </Link>
           <div className="hidden lg:flex lg:gap-x-12">
-            {NAVIGATION.map(item =>
-              item.name === "Home" ? null : (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-semibold leading-6 text-gray-900"
-                >
-                  {item.name}
-                </Link>
-              ),
-            )}
+            {isAuthenticated &&
+              NAVIGATION.map(item =>
+                item.name === "Home" ? null : (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-sm font-semibold leading-6 text-gray-900"
+                  >
+                    {item.name}
+                  </Link>
+                ),
+              )}
           </div>
         </div>
-        <div className="hidden lg:flex flex-1 items-center justify-center gap-x-6">
-          <input
-            type="text"
-            placeholder="Buscar álbuns, músicas ou artistas..."
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={handleSearch}
-            className="border rounded p-2 w-full max-w-xs"
-          />
-        </div>
+        {isAuthenticated && (
+          <div className="hidden lg:flex flex-1 items-center justify-center gap-x-6">
+            <input
+              type="text"
+              placeholder="Buscar álbuns, músicas ou artistas..."
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onKeyDown={handleSearch}
+              className="border rounded p-2 w-full max-w-xs"
+            />
+          </div>
+        )}
         <div className="flex items-center gap-x-6">
           {!isAuthenticated ? (
             <>
@@ -149,31 +153,33 @@ export default function Header({ isAuthenticated }: HeaderProps) {
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                {NAVIGATION.map(item => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-              <div className="py-6">
-                <input
-                  type="text"
-                  placeholder="Buscar álbuns, músicas ou artistas..."
-                  value={query}
-                  onChange={e => setQuery(e.target.value)}
-                  onKeyDown={handleSearch}
-                  className="border rounded p-2 w-full"
-                />
+          {isAuthenticated && (
+            <div className="mt-6 flow-root">
+              <div className="-my-6 divide-y divide-gray-500/10">
+                <div className="space-y-2 py-6">
+                  {NAVIGATION.map(item => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+                <div className="py-6">
+                  <input
+                    type="text"
+                    placeholder="Buscar álbuns, músicas ou artistas..."
+                    value={query}
+                    onChange={e => setQuery(e.target.value)}
+                    onKeyDown={handleSearch}
+                    className="border rounded p-2 w-full"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </DialogPanel>
       </Dialog>
     </header>

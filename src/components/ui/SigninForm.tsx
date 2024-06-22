@@ -1,20 +1,46 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { useAuth } from "@/app/providers/AuthContext";
+import { useRouter } from "next/navigation";
+import logo from "@/images/logo_alt.svg";
+import Image from "next/image";
+
 export default function Signin() {
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await login(email, password);
+      router.push("/");
+    } catch (error: any) {
+      console.error("failed:", error);
+      if (error.response && error.response.data && error.response.data.detail) {
+        setError(error.response.data.detail);
+      } else {
+        setError("Falha ao entrar");
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
+          <Image className="mx-auto h-10 w-auto" src={logo} alt="Songboxd" />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Entre na sua conta
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form onSubmit={handleSubmit} className="space-y-6" method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -28,6 +54,8 @@ export default function Signin() {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -49,6 +77,8 @@ export default function Signin() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -65,14 +95,16 @@ export default function Signin() {
             </div>
           </form>
 
+          {error && <p className="text-sm text-red-500">{error}</p>}
+
           <p className="mt-10 text-center text-sm text-gray-500">
             Ainda não é membro?{" "}
-            <a
-              href="#"
+            <Link
+              href="/signup"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
               Cadastre-se gratiuitamente
-            </a>
+            </Link>
           </p>
         </div>
       </div>
