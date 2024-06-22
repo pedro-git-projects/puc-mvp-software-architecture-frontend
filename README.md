@@ -1,6 +1,16 @@
-# Projeto MPV em Arquitetura de Software 
+# Projeto MPV em Arquitetura de Software (Songboxd)
 
-Este é o frontend do MVP em Arquitetura de Software para a pós graduação em engenharia de software da PUC-RJ desenvolvido com Next.js. A aplicação consome uma API própria de persistência hospedada em [TODO](https://todo.com) e a API do TheAudioDB.
+Este é o frontend do MVP em Arquitetura de Software para a pós-graduação em engenharia de software da PUC-RJ desenvolvido com Next.js. A aplicação consome uma API própria de persistência hospedada [aqui](https://github.com/pedro-git-projects/puc-mvp-software-architecture-persistence) e as APIs públicas e gratuitas [Music Brainz](https://musicbrainz.org/doc/MusicBrainz_API) e [Cover Art Archive](https://musicbrainz.org/doc/Cover_Art_Archive/API).
+
+## Tabela de Conteúdos
+
+1. [Pré-requisitos](#pré-requisitos)
+2. [Estrutura do Projeto](#estrutura-do-projeto)
+3. [Configuração](#configuração)
+4. [Desenvolvimento](#desenvolvimento)
+5. [Dockerfile](#dockerfile)
+6. [docker-compose.yml](#docker-composeyml)
+7. [Critérios Avaliativos](#critérios-avaliativos)
 
 ## Pré-requisitos
 
@@ -43,6 +53,7 @@ Para rodar a aplicação em modo de desenvolvimento, use o Docker Compose:
 
 A aplicação estará disponível em [http://localhost:3000](http://localhost:3000).
 
+Lembre-se de ter subido também a outra API que faz parte do projeto, hospedada [aqui](https://github.com/pedro-git-projects/puc-mvp-software-architecture-persistence)
 
 ## Dockerfile
 
@@ -93,3 +104,23 @@ services:
       NODE_ENV: development
     command: ["npm", "run", "dev"]
 ```
+
+## Critérios Avaliativos
+
+- "A interface do usuário deve fazer chamadas a pelo menos 5 rotas diferentes."
+
+| Rota                                                                                                    | Componente            | Serviço                   | Propósito                                                                                               |
+|---------------------------------------------------------------------------------------------------------|-----------------------|---------------------------|---------------------------------------------------------------------------------------------------------|
+| `https://musicbrainz.org/ws/2/release?query=artist:${artist}%20AND%20release:${album}&fmt=json`         | `AlbumSearch`         | MusicBrainz               | Buscar informações de álbuns de um artista específico. No caso é utilizada para pegar o ID que pode ser usado para buscar a arte do álbum em uma segunda API.                                     |
+| `https://coverartarchive.org/release/${releaseId}/front`                                                | `AlbumCover`          | Cover Art Archive         | Obter a url da imagem da capa de um lançamento específico.                                                      |
+| `https://musicbrainz.org/ws/2/release?query=artist:${query.artist}%20AND%20release:${query.album}&fmt=json` | `SearchResults`       | MusicBrainz               | Buscar informações de álbuns de um artista específico com base em uma consulta do usuário. |
+| `http://localhost:8000/token`                                                                           | `AuthProvider`        | Servidor desenvolvido por mim | Obter o token de autenticação para login do usuário.                                                     |
+| `http://localhost:8000/users/`                                                                          | `UserProfile`         | Servidor desenvolvido por mim | Obter informações dos usuários registrados.                                                             |
+
+- "Será permitido a utilização de bibliotecas ou frameworks baseadas em Javascript, como o React, Next, e outras; Será permitido também o uso de bibliotecas de componentes, como o Material UI, Bootstrap, e outras" 
+
+A aplicação é desenvolvida com NextJS 14 e Tailwind.
+
+- "É fortemente recomendado produzir uma imagem (fluxograma) ilustrando a arquitetura da aplicação desenvolvida."
+
+![Diagrama do Projeto](./diagram.png)
