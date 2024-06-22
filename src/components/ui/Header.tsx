@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import logo from "@/images/logo_alt.svg";
 import Image from "next/image";
 import { useAuth } from "@/app/providers/AuthContext";
+import SearchInput from "./SearchInput";
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -16,15 +17,8 @@ interface HeaderProps {
 
 export default function Header({ isAuthenticated }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [query, setQuery] = useState("");
   const router = useRouter();
   const { logout } = useAuth();
-
-  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      router.push(`/search?query=${query}`);
-    }
-  };
 
   const handleLogout = () => {
     logout();
@@ -59,14 +53,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
         </div>
         {isAuthenticated && (
           <div className="hidden lg:flex flex-1 items-center justify-center gap-x-6">
-            <input
-              type="text"
-              placeholder="Buscar álbuns, músicas ou artistas..."
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={handleSearch}
-              className="border rounded p-2 w-full max-w-xs"
-            />
+            <SearchInput />
           </div>
         )}
         <div className="flex items-center gap-x-6">
@@ -168,14 +155,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
                   ))}
                 </div>
                 <div className="py-6">
-                  <input
-                    type="text"
-                    placeholder="Buscar álbuns, músicas ou artistas..."
-                    value={query}
-                    onChange={e => setQuery(e.target.value)}
-                    onKeyDown={handleSearch}
-                    className="border rounded p-2 w-full"
-                  />
+                  <SearchInput />
                 </div>
               </div>
             </div>
