@@ -80,9 +80,9 @@ Lembre-se de ter subido também a outra API que faz parte do projeto, hospedada 
    - Aqui você pode ver o seu email registrado.
    - Você também pode optar por deletar sua conta.
 
-A ideia inicial do projeto era dar aos usuários a opção de dar uma nota de 1 a 5 para cada álbum. Devido as minhas altas demandas no meu trabalho e os critérios de avaliação, decidi deixar essa versão simplificada do projeto, a qual atende aos requisitos de avaliação, voltando para implementar as demais funcionalidades em um momento futuro.
+A ideia inicial do projeto era permitir que os usuários avaliassem cada álbum com uma nota de 1 a 5. No entanto, devido às altas demandas do meu trabalho, estou próximo da entrega de uma aplicação na qual sou o único desenvolvedor, e aos critérios de avaliação, optei por lançar uma versão simplificada do projeto que atende aos requisitos de avaliação. Planejo implementar as funcionalidades adicionais em uma fase futura.
 
-Embora a funcionalidade prática seja limitada, foi feita a integração com duas APIS externas de terceiros, uma API externa desenvolvida para o trabalho e ainda uma rota de server actions do NextJS.
+Apesar das funcionalidades práticas serem limitadas nesta versão, foi realizada a integração com duas APIs externas de terceiros, uma API desenvolvida especificamente para o projeto e uma rota de server actions do Next.js.
 
 ## Dockerfile
 
