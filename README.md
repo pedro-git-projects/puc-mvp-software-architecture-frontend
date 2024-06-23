@@ -8,9 +8,10 @@ Este é o frontend do MVP em Arquitetura de Software para a pós-graduação em 
 2. [Estrutura do Projeto](#estrutura-do-projeto)
 3. [Configuração](#configuração)
 4. [Desenvolvimento](#desenvolvimento)
-5. [Dockerfile](#dockerfile)
-6. [docker-compose.yml](#docker-composeyml)
-7. [Critérios Avaliativos](#critérios-avaliativos)
+5. [Uso](#uso)
+6. [Dockerfile](#dockerfile)
+7. [docker-compose.yml](#docker-composeyml)
+8. [Critérios Avaliativos](#critérios-avaliativos)
 
 ## Pré-requisitos
 
@@ -54,6 +55,34 @@ Para rodar a aplicação em modo de desenvolvimento, use o Docker Compose:
 A aplicação estará disponível em [http://localhost:3000](http://localhost:3000).
 
 Lembre-se de ter subido também a outra API que faz parte do projeto, hospedada [aqui](https://github.com/pedro-git-projects/puc-mvp-software-architecture-persistence)
+
+## Uso
+
+1. **Abrir a Aplicação**:
+   - Inicie a aplicação no seu navegador.
+
+2. **Cadastro**:
+   - Clique no botão para se cadastrar.
+   - Preencha o formulário de criação de conta com seus dados.
+   - Clique em "Criar Conta".
+
+3. **Login**:
+   - Após criar a conta, faça login usando suas credenciais.
+   
+4. **Barra de Pesquisa**:
+   - Após fazer login, você terá acesso à barra de pesquisa do site.
+   - Digite o nome de um álbum ou artista na barra de pesquisa.
+   - Clique na lupa para realizar a pesquisa.
+   - Você verá uma lista dos álbuns relacionados à sua pesquisa.
+
+5. **Perfil**:
+   - Navegue até a seção de perfil.
+   - Aqui você pode ver o seu email registrado.
+   - Você também pode optar por deletar sua conta.
+
+A ideia inicial do projeto era dar aos usuários a opção de dar uma nota de 1 a 5 para cada álbum. Devido as minhas altas demandas no meu trabalho e os critérios de avaliação, decidi deixar essa versão simplificada do projeto, a qual atende aos requisitos de avaliação, voltando para implementar as demais funcionalidades em um momento futuro.
+
+Embora a funcionalidade prática seja limitada, foi feita a integração com duas APIS externas de terceiros, uma API externa desenvolvida para o trabalho e ainda uma rota de server actions do NextJS.
 
 ## Dockerfile
 
