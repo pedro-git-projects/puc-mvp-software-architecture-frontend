@@ -150,6 +150,157 @@ services:
 | `http://localhost:8000/users/me/`                                                                       | `Profile`             | Servidor desenvolvido por mim | GET    | Obter o perfil do usuário logado.                                                             |
 | `/api/search?album=${album}`                                                                            | `SearchInput`         | Next.js Server Action     | GET    | Buscar informações de álbuns de um artista específico com base no nome do álbum fornecido pelo usuário.                                                             |
 
+- "Uso de uma API externa pública e que ofereça um serviço não pago. Apresentar na documentação a componente principal a API externa que será utilizada, deixando claro informações como: licença de uso (se aplicável), cadastro (se necessário) e rotas que foram utilizados."
+
+Como visto na tabela acima foram utilizadas duas APIs externas, **Music Brainz** e **Cover Art Archive**. Aqui estão os componentes:
+
+
+```tsx
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const album = searchParams.get("album");
+
+  if (!album) {
+    return NextResponse.json(
+      { error: "Nome do álbum é obrigatório" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const response = await fetch(
+      `https://musicbrainz.org/ws/2/release/?query=release:${album}&fmt=json`,
+      {
+        headers: {
+          "User-Agent": "Songboxd/1.0 (pedro.coding.contact@gmail.com)",
+        },
+      },
+    );
+    const data: MusicBrainzResponse = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json({ error: data }, { status: response.status });
+    }
+
+    return NextResponse.json(data.releases);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Falha ao buscar dados do MusicBrainz" },
+      { status: 500 },
+    );
+  }
+}
+```
+
+```tsx
+export const fetchAlbumData = async (artist: string, album: string) => {
+  const response = await fetch(
+    `https://musicbrainz.org/ws/2/release?query=artist:${artist}%20AND%20release:${album}&fmt=json`,
+  );
+  const data = await response.json();
+  if (data.releases && data.releases.length > 0) {
+    const releaseId = data.releases[0].id;
+    const coverArtUrl = `https://coverartarchive.org/release/${releaseId}/front`;
+    return {
+      name: data.releases[0].title,
+      artist: data.releases[0]["artist-credit"][0].name,
+      coverArtUrl,
+    };
+  }
+  return null;
+};
+```
+
+```tsx
+export const fetchAlbums = async (queries: Query[]): Promise<Album[]> => {
+  const albums = [];
+  for (const query of queries) {
+    const response = await fetch(
+      `https://musicbrainz.org/ws/2/release?query=artist:${query.artist}%20AND%20release:${query.album}&fmt=json`,
+    );
+    const data = await response.json();
+    if (data.releases && data.releases.length > 0) {
+      const releaseId = data.releases[0].id;
+      const coverArtUrl = `https://coverartarchive.org/release/${releaseId}/front`;
+      albums.push({
+        name: data.releases[0].title,
+        artist: data.releases[0]["artist-credit"][0].name,
+        coverArtUrl,
+      });
+    }
+  }
+  return albums;
+};
+
+```
+
+```tsx
+export default function AlbumCard({ release }: AlbumCardProps) {
+  const [coverArtUrl, setCoverArtUrl] = useState<string | null>(null);
+  const [coverArtError, setCoverArtError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchCoverArt = async () => {
+      try {
+        const response = await fetch(
+          `https://coverartarchive.org/release/${release.id}/front-250`,
+        );
+        if (response.ok) {
+          setCoverArtUrl(response.url);
+        } else {
+          setCoverArtError(true);
+        }
+      } catch (error) {
+        setCoverArtError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCoverArt();
+  }, [release.id]);
+
+  return (
+    <div className="border rounded-lg p-4 shadow-md mb-4">
+      {loading ? (
+        <div className="w-full h-64 flex items-center justify-center bg-gray-200 text-gray-600 rounded-md mb-4 animate-pulse">
+          <div className="text-center">Carregando...</div>
+        </div>
+      ) : coverArtError ? (
+        <div className="w-full h-64 flex items-center justify-center bg-gray-200 text-gray-600 rounded-md mb-4">
+          Capa Não Encontrada
+        </div>
+      ) : (
+        coverArtUrl && (
+          <img
+            src={coverArtUrl}
+            alt={`${release.title} cover art`}
+            className="w-full h-64 object-cover rounded-md mb-4"
+            onError={() => setCoverArtError(true)}
+          />
+        )
+      )}
+      <h2 className="text-xl font-bold">{release.title}</h2>
+      <p className="text-gray-600">
+        Artista:{" "}
+        {release["artist-credit"] && release["artist-credit"].length > 0
+          ? release["artist-credit"][0].name
+          : "Artista Desconhecido"}
+      </p>
+      <p className="text-gray-600">Data de lançamento: {release.date}</p>
+      <p className="text-gray-600">País: {release.country}</p>
+      {release["label-info"] && release["label-info"].length > 0 && (
+        <p className="text-gray-600">
+          Gravadora: {release["label-info"][0].label.name}
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+
 - "Será permitido a utilização de bibliotecas ou frameworks baseadas em Javascript, como o React, Next, e outras; Será permitido também o uso de bibliotecas de componentes, como o Material UI, Bootstrap, e outras" 
 
 A aplicação é desenvolvida com NextJS 14 e Tailwind.
