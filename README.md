@@ -12,6 +12,7 @@ Este é o frontend do MVP em Arquitetura de Software para a pós-graduação em 
 6. [Dockerfile](#dockerfile)
 7. [docker-compose.yml](#docker-composeyml)
 8. [Critérios Avaliativos](#critérios-avaliativos)
+9. [Vídeo](#vídeo)
 
 ## Pré-requisitos
 
@@ -308,3 +309,8 @@ A aplicação é desenvolvida com NextJS 14 e Tailwind.
 - "É fortemente recomendado produzir uma imagem (fluxograma) ilustrando a arquitetura da aplicação desenvolvida."
 
 ![Diagrama do Projeto](./diagram.png)
+
+
+## Vídeo
+
+Para a conveniência dos professores uma demonstração em vídeo foi colocada no [YouTube](https://youtu.be/HKRCr_5HPz4)
