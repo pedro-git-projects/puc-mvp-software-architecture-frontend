@@ -1,30 +1,30 @@
 import {
-  MusicalNoteIcon,
-  StarIcon,
+  ListBulletIcon,
+  HeartIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
 
 const features = [
   {
-    name: "Avalie Álbuns",
+    name: "Pesquise álbuns e artistas",
     description:
-      "Crie avaliações detalhadas de seus álbuns favoritos. Compartilhe suas opiniões e veja o que outros usuários estão dizendo.",
-    href: "#",
-    icon: StarIcon,
-  },
-  {
-    name: "Veja Avaliações de Outras Pessoas",
-    description:
-      "Explore avaliações de outros usuários para descobrir novos álbuns e obter diferentes perspectivas sobre seus álbuns favoritos.",
+      "Use a barra de pesquisa para encontrar álbuns e artistas específicos rapidamente.",
     href: "#",
     icon: MagnifyingGlassIcon,
   },
   {
-    name: "Econtre Álbuns",
+    name: "Favorite álbuns",
     description:
-      "Procure por álbuns usando filtros avançados e descubra novas músicas para adicionar à sua coleção.",
+      "Adicione álbuns à sua lista de favoritos para acessá-los facilmente sempre que quiser.",
     href: "#",
-    icon: MusicalNoteIcon,
+    icon: HeartIcon,
+  },
+  {
+    name: "Acesse sua lista de favoritos",
+    description:
+      "Veja todos os álbuns que você adicionou aos favoritos em um só lugar.",
+    href: "#",
+    icon: ListBulletIcon,
   },
 ];
 
