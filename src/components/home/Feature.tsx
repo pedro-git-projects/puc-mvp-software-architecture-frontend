@@ -34,15 +34,15 @@ export default function Feature() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">
-            Explore, Avalie, Conecte
+            Explore, Favorite, Relembre
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Tudo que você precisa para avaliar álbuns
+            Tudo que você precisa para gerenciar seus álbuns favoritos
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Descubra novos álbuns, compartilhe suas avaliações e veja o que
-            outros estão ouvindo. Conecte-se com amantes da música ao redor do
-            mundo.
+            Cadastre-se no site, pesquise álbuns e artistas, e adicione seus
+            favoritos. Acesse e gerencie sua lista de favoritos facilmente.
+            Conecte-se com amantes da música ao redor do mundo.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
