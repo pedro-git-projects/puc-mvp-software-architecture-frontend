@@ -503,4 +503,4 @@ A aplicação é desenvolvida com NextJS 14 e Tailwind.
 
 ## Vídeo
 
-Para a conveniência dos professores uma demonstração em vídeo foi colocada no [YouTube](https://youtu.be/HKRCr_5HPz4)
+ A demonstração em vídeo está hospedada em: [YouTube](https://youtu.be/KvMT9ThhVQQ)
