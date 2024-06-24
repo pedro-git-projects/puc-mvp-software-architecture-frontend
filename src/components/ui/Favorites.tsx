@@ -116,7 +116,7 @@ export default function Favorites() {
   }, [isAuthenticated]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-white p-4">
       {favorites.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 w-full max-w-6xl">
           {favorites.map((release: PythonRelease) => (
