@@ -116,16 +116,26 @@ export default function Favorites() {
   }, [isAuthenticated]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white p-4">
-      {favorites.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 w-full max-w-6xl">
-          {favorites.map((release: PythonRelease) => (
-            <FavoriteAlbumCard key={release.album_id} release={release} favorites={favorites} />
-          ))}
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl lg:mx-0">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Seus álbums favoritos</h2>
+          <p className="mt-2 text-lg leading-8 text-gray-600">
+          Clique no coração para remover uma entrada.
+          </p>
         </div>
-      ) : (
-        <p>No favorites found.</p>
-      )}
+        <div className="mx-auto mt-10 max-w-2xl border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none">
+          {favorites.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 lg:gap-8 w-full">
+              {favorites.map((release: PythonRelease) => (
+                <FavoriteAlbumCard key={release.album_id} release={release} favorites={favorites} />
+              ))}
+            </div>
+          ) : (
+            <p>Nenhum favorito encontrado.</p>
+          )}
+        </div>
+      </div>
     </div>
-  );
+  )
 }
