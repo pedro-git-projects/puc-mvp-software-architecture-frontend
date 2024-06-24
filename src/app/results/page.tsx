@@ -1,9 +1,9 @@
 "use client";
 
 import AlbumCard from "@/components/ui/AlbumCard";
-import { Release } from "@/lib/interfaces";
+import { PythonRelease, Release } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
-import { useAuth } from "../providers/AuthContext";
+import { useAuth } from "@/app/providers/AuthContext";
 
 function SkeletonCard() {
   return (
@@ -39,11 +39,14 @@ export default function ResultsPage() {
       const fetchFavorites = async () => {
         try {
           const token = localStorage.getItem("token");
-          const response = await fetch("http://localhost:8000/users/me/favorites", {
-            headers: {
-              "Authorization": `Bearer ${token}`
-            }
-          });
+          const response = await fetch(
+            "http://localhost:8000/users/me/favorites",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
 
           if (response.ok) {
             const data = await response.json();
@@ -89,16 +92,34 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white p-4">
-      {releases.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 w-full max-w-6xl">
-          {releases.map((release: Release) => (
-            <AlbumCard key={release.id} release={release} favorites={favorites} />
-          ))}
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl lg:mx-0">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Resultados
+          </h2>
+          <p className="mt-2 text-lg leading-8 text-gray-600">
+            Clique no coração para favoritar ou remover dos favoritos.
+          </p>
         </div>
-      ) : (
-        <p>Sua pesquisa não retornou resultados.</p>
-      )}
+        <div className="mx-auto mt-10 max-w-2xl border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none">
+          {releases.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 lg:gap-8 w-full">
+              {releases.map((release: Release) => (
+                <AlbumCard
+                  key={release.id}
+                  release={release}
+                  favorites={favorites}
+                />
+              ))}
+            </div>
+          ) : (
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Nenhum resultado encontrado para o termo pesquisado.
+            </h2>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

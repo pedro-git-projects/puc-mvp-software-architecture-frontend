@@ -19,7 +19,7 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
-    if ('cover_art_url' in release) {
+    if ("cover_art_url" in release) {
       setCoverArtUrl(release.cover_art_url);
       setLoading(false);
     } else {
@@ -61,18 +61,22 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
         ? `http://localhost:8000/users/me/favorites/${release.id}`
         : "http://localhost:8000/users/me/favorites";
       const method = isFavorite ? "DELETE" : "POST";
-      const body = !isFavorite ? JSON.stringify({
-        album_id: release.id,
-        album_name: release.title || release.album_name,
-        artist_name: release["artist-credit"] ? release["artist-credit"][0].name : release.artist_name,
-        cover_art_url: coverArtUrl,
-      }) : null;
+      const body = !isFavorite
+        ? JSON.stringify({
+            album_id: release.id,
+            album_name: release.title || release.album_name,
+            artist_name: release["artist-credit"]
+              ? release["artist-credit"][0].name
+              : release.artist_name,
+            cover_art_url: coverArtUrl,
+          })
+        : null;
 
       const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body,
       });
@@ -107,7 +111,9 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
           />
         )
       )}
-      <h2 className="text-xl font-bold">{release.title || release.album_name}</h2>
+      <h2 className="text-xl font-bold">
+        {release.title || release.album_name}
+      </h2>
       <p className="text-gray-600">
         Artista:{" "}
         {release["artist-credit"] && release["artist-credit"].length > 0
@@ -121,11 +127,12 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
           Gravadora: {release["label-info"][0].label.name}
         </p>
       )}
-      <button
-        onClick={handleToggleFavorite}
-        className="mt-4 px-4 py-2"
-      >
-        {isFavorite ? <HeartIconSolid className="h-6 w-6 text-indigo-600" /> : <HeartIconOutline className="h-6 w-6 text-indigo-600" />}
+      <button onClick={handleToggleFavorite} className="mt-4 px-4 py-2">
+        {isFavorite ? (
+          <HeartIconSolid className="h-6 w-6 text-indigo-600" />
+        ) : (
+          <HeartIconOutline className="h-6 w-6 text-indigo-600" />
+        )}
       </button>
     </div>
   );

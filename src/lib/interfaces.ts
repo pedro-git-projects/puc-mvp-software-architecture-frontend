@@ -97,4 +97,4 @@ export type PythonRelease = {
   country?: string;
   "artist-credit"?: { name: string }[];
   "label-info"?: { label: { name: string } }[];
-}
+};

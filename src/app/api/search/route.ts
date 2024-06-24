@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-async function fetchWithRetry(url: string, options: RequestInit, retries: number = 3): Promise<Response> {
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  retries: number = 3,
+): Promise<Response> {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);
