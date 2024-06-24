@@ -1,30 +1,30 @@
 import {
-  MusicalNoteIcon,
-  StarIcon,
+  ListBulletIcon,
+  HeartIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
 
 const features = [
   {
-    name: "Avalie Álbuns",
+    name: "Pesquise álbuns e artistas",
     description:
-      "Crie avaliações detalhadas de seus álbuns favoritos. Compartilhe suas opiniões e veja o que outros usuários estão dizendo.",
-    href: "#",
-    icon: StarIcon,
-  },
-  {
-    name: "Veja Avaliações de Outras Pessoas",
-    description:
-      "Explore avaliações de outros usuários para descobrir novos álbuns e obter diferentes perspectivas sobre seus álbuns favoritos.",
+      "Use a barra de pesquisa para encontrar álbuns e artistas específicos rapidamente.",
     href: "#",
     icon: MagnifyingGlassIcon,
   },
   {
-    name: "Econtre Álbuns",
+    name: "Favorite álbuns",
     description:
-      "Procure por álbuns usando filtros avançados e descubra novas músicas para adicionar à sua coleção.",
+      "Adicione álbuns à sua lista de favoritos para acessá-los facilmente sempre que quiser.",
     href: "#",
-    icon: MusicalNoteIcon,
+    icon: HeartIcon,
+  },
+  {
+    name: "Acesse sua lista de favoritos",
+    description:
+      "Veja todos os álbuns que você adicionou aos favoritos em um só lugar.",
+    href: "#",
+    icon: ListBulletIcon,
   },
 ];
 
@@ -34,15 +34,15 @@ export default function Feature() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">
-            Explore, Avalie, Conecte
+            Explore, Favorite, Relembre
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Tudo que você precisa para avaliar álbuns
+            Tudo que você precisa para gerenciar seus álbuns favoritos
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Descubra novos álbuns, compartilhe suas avaliações e veja o que
-            outros estão ouvindo. Conecte-se com amantes da música ao redor do
-            mundo.
+            Cadastre-se no site, pesquise álbuns e artistas, e adicione seus
+            favoritos. Acesse e gerencie sua lista de favoritos facilmente.
+            Conecte-se com amantes da música ao redor do mundo.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">

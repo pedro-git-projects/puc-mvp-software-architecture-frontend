@@ -16,16 +16,13 @@ export default function Signin() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setError("");
+
     try {
       await login(email, password);
       router.push("/");
     } catch (error: any) {
-      console.error("failed:", error);
-      if (error.response && error.response.data && error.response.data.detail) {
-        setError(error.response.data.detail);
-      } else {
-        setError("Falha ao entrar");
-      }
+      setError(error.message || "Falha ao entrar");
     }
   };
 

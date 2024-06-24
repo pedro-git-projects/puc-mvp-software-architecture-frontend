@@ -75,7 +75,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           ) : (
             <button
               onClick={handleLogout}
-              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="hidden lg:block rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sair
             </button>
@@ -99,38 +99,11 @@ export default function Header({ isAuthenticated }: HeaderProps) {
       >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center gap-x-6">
+          <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Music Explorer</span>
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt="Music Explorer"
-              />
+              <Image className="h-8 w-auto" src={logo} alt="Music Explorer" />
             </a>
-            {!isAuthenticated ? (
-              <>
-                <Link
-                  href="/signup"
-                  className="ml-auto rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Cadastrar-se
-                </Link>
-                <Link
-                  href="/signin"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Entrar
-                </Link>
-              </>
-            ) : (
-              <button
-                onClick={handleLogout}
-                className="ml-auto rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sair
-              </button>
-            )}
             <button
               type="button"
               className="-m-2.5 rounded-md p-2.5 text-gray-700"
@@ -148,7 +121,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 text-center items-center"
                     >
                       {item.name}
                     </Link>
@@ -157,7 +130,31 @@ export default function Header({ isAuthenticated }: HeaderProps) {
                 <div className="py-6">
                   <SearchInput />
                 </div>
+                <div className="py-6">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Sair
+                  </button>
+                </div>
               </div>
+            </div>
+          )}
+          {!isAuthenticated && (
+            <div className="mt-6 space-y-2">
+              <Link
+                href="/signup"
+                className="block w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white text-center shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Cadastrar-se
+              </Link>
+              <Link
+                href="/signin"
+                className="block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 text-center"
+              >
+                Entrar
+              </Link>
             </div>
           )}
         </DialogPanel>
