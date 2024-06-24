@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/app/providers/AuthContext";
 import { Release } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 
@@ -8,9 +9,11 @@ interface AlbumCardProps {
 }
 
 export default function AlbumCard({ release }: AlbumCardProps) {
+  const { isAuthenticated } = useAuth();
   const [coverArtUrl, setCoverArtUrl] = useState<string | null>(null);
   const [coverArtError, setCoverArtError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCoverArt = async () => {
@@ -32,6 +35,39 @@ export default function AlbumCard({ release }: AlbumCardProps) {
 
     fetchCoverArt();
   }, [release.id]);
+
+
+  const handleSaveFavorite = async () => {
+    if (!isAuthenticated) {
+      alert("Você precisa estar loggado para salvar nos favoritos");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8000/users/me/favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          album_id: release.id,
+          album_name: release.title,
+          artist_name: release["artist-credit"][0].name,
+          cover_art_url: coverArtUrl,
+        }),
+      });
+
+      if (response.ok) {
+        setIsFavorite(true);
+      } else {
+        console.error("Error saving favorite:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error saving favorite:", error);
+    }
+  };
 
   return (
     <div className="border rounded-lg p-4 shadow-md mb-4">
@@ -67,6 +103,13 @@ export default function AlbumCard({ release }: AlbumCardProps) {
           Gravadora: {release["label-info"][0].label.name}
         </p>
       )}
+      <button
+        onClick={handleSaveFavorite}
+        className={`mt-4 px-4 py-2 rounded ${isFavorite ? 'bg-gray-300' : 'bg-indigo-600 text-white'} `}
+        disabled={isFavorite}
+      >
+        {isFavorite ? "Favorited" : "Save to Favorites"}
+      </button>
     </div>
   );
 }

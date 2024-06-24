@@ -86,3 +86,15 @@ export type Media = {
   "disc-count": number;
   "track-count": number;
 };
+
+export type PythonRelease = {
+  id: string;
+  album_id: string;
+  album_name: string;
+  artist_name: string;
+  cover_art_url: string;
+  date?: string;
+  country?: string;
+  "artist-credit"?: { name: string }[];
+  "label-info"?: { label: { name: string } }[];
+}

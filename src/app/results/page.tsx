@@ -4,16 +4,6 @@ import AlbumCard from "@/components/ui/AlbumCard";
 import { Release } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 
-const LoadingSkeleton = () => {
-  return (
-    <div className="animate-pulse flex flex-col items-center justify-center p-4 border rounded-lg bg-white shadow-md">
-      <div className="w-24 h-24 bg-gray-300 rounded-md"></div>
-      <div className="mt-2 w-32 h-4 bg-gray-300 rounded"></div>
-      <div className="mt-2 w-20 h-4 bg-gray-300 rounded"></div>
-    </div>
-  );
-};
-
 export default function ResultsPage() {
   const [releases, setReleases] = useState<Release[]>(() => {
     try {
