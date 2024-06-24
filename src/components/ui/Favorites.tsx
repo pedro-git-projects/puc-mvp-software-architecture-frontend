@@ -1,16 +1,62 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PythonRelease, Release } from "@/lib/interfaces";
+import { PythonRelease } from "@/lib/interfaces";
 import { useAuth } from "@/app/providers/AuthContext";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/20/solid";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 
-interface AlbumCardProps {
+interface FavoriteAlbumCardProps {
   release: PythonRelease;
+  favorites: PythonRelease[];
 }
 
-function AlbumCard({ release }: AlbumCardProps) {
+function FavoriteAlbumCard({ release, favorites }: FavoriteAlbumCardProps) {
   const { isAuthenticated } = useAuth();
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
+
+  useEffect(() => {
+    const isFavorited = favorites.some(fav => fav.album_id === release.album_id);
+    setIsFavorite(isFavorited);
+  }, [favorites, release]);
+
+  const handleToggleFavorite = async () => {
+    if (!isAuthenticated) {
+      alert("Você precisa estar logado para salvar nos favoritos");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const url = isFavorite
+        ? `http://localhost:8000/users/me/favorites/${release.album_id}`
+        : "http://localhost:8000/users/me/favorites";
+      const method = isFavorite ? "DELETE" : "POST";
+      const body = !isFavorite ? JSON.stringify({
+        album_id: release.album_id,
+        album_name: release.album_name,
+        artist_name: release.artist_name,
+        cover_art_url: release.cover_art_url,
+      }) : null;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body,
+      });
+
+      if (response.ok) {
+        setIsFavorite(!isFavorite);
+      } else {
+        console.error("Error toggling favorite:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   return (
     <div className="border rounded-lg p-4 shadow-md mb-4">
@@ -18,33 +64,30 @@ function AlbumCard({ release }: AlbumCardProps) {
         src={release.cover_art_url}
         alt={`${release.album_name} cover art`}
         className="w-full h-64 object-cover rounded-md mb-4"
-        onError={() => setCoverArtError(true)}
+        onError={() => setIsFavorite(true)}
       />
       <h2 className="text-xl font-bold">{release.album_name}</h2>
-      <p className="text-gray-600">
-        Artista: {release.artist_name}
-      </p>
-      {release.date && <p className="text-gray-600">Data de lançamento: {release.date}</p>}
-      {release.country && <p className="text-gray-600">País: {release.country}</p>}
+      <p className="text-gray-600">Artista: {release.artist_name}</p>
+      <p className="text-gray-600">Data de lançamento: {release.date || "Data desconhecida"}</p>
+      <p className="text-gray-600">País: {release.country || "País desconhecido"}</p>
       {release["label-info"] && release["label-info"].length > 0 && (
         <p className="text-gray-600">
           Gravadora: {release["label-info"][0].label.name}
         </p>
       )}
       <button
-        className={`mt-4 px-4 py-2 rounded ${isFavorite ? 'bg-gray-300' : 'bg-indigo-600 text-white'} `}
-        disabled={isFavorite}
+        onClick={handleToggleFavorite}
+        className="mt-4 px-4 py-2"
       >
-        {isFavorite ? "Favorited" : "Save to Favorites"}
+        {isFavorite ? <HeartIconSolid className="h-6 w-6 text-indigo-600" /> : <HeartIconOutline className="h-6 w-6 text-indigo-600" />}
       </button>
     </div>
   );
 }
 
-
 export default function Favorites() {
   const { isAuthenticated } = useAuth();
-  const [favorites, setFavorites] = useState<Release[]>([]);
+  const [favorites, setFavorites] = useState<PythonRelease[]>([]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -57,8 +100,6 @@ export default function Favorites() {
             "Authorization": `Bearer ${token}`
           }
         });
-        console.log("Reponse ", response);
-
 
         if (response.ok) {
           const data = await response.json();
@@ -78,8 +119,8 @@ export default function Favorites() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       {favorites.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 w-full max-w-6xl">
-          {favorites.map((release: Release) => (
-            <AlbumCard key={release.id} release={release} />
+          {favorites.map((release: PythonRelease) => (
+            <FavoriteAlbumCard key={release.album_id} release={release} favorites={favorites} />
           ))}
         </div>
       ) : (

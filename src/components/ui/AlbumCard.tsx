@@ -1,11 +1,13 @@
 "use client";
 
-import { useAuth } from "@/app/providers/AuthContext";
-import { PythonRelease, Release } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
+import { PythonRelease, Release } from "@/lib/interfaces";
+import { useAuth } from "@/app/providers/AuthContext";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/20/solid";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 
 interface AlbumCardProps {
-  release: Release;
+  release: Release | PythonRelease;
   favorites: PythonRelease[];
 }
 
@@ -17,60 +19,71 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchCoverArt = async () => {
-      try {
-        const response = await fetch(
-          `https://coverartarchive.org/release/${release.id}/front-250`,
-        );
-        if (response.ok) {
-          setCoverArtUrl(response.url);
-        } else {
+    if ('cover_art_url' in release) {
+      setCoverArtUrl(release.cover_art_url);
+      setLoading(false);
+    } else {
+      const fetchCoverArt = async () => {
+        try {
+          const response = await fetch(
+            `https://coverartarchive.org/release/${release.id}/front-250`,
+          );
+          if (response.ok) {
+            setCoverArtUrl(response.url);
+          } else {
+            setCoverArtError(true);
+          }
+        } catch (error) {
           setCoverArtError(true);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        setCoverArtError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchCoverArt();
-  }, [release.id]);
+      fetchCoverArt();
+    }
+  }, [release]);
 
   useEffect(() => {
     const isFavorited = favorites.some(fav => fav.album_id === release.id);
     setIsFavorite(isFavorited);
   }, [favorites, release.id]);
 
-  const handleSaveFavorite = async () => {
+  const handleToggleFavorite = async () => {
     if (!isAuthenticated) {
-      alert("Você precisa estar loggado para salvar nos favoritos");
+      alert("Você precisa estar logado para salvar nos favoritos");
       return;
     }
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/users/me/favorites", {
-        method: "POST",
+      const url = isFavorite
+        ? `http://localhost:8000/users/me/favorites/${release.id}`
+        : "http://localhost:8000/users/me/favorites";
+      const method = isFavorite ? "DELETE" : "POST";
+      const body = !isFavorite ? JSON.stringify({
+        album_id: release.id,
+        album_name: release.title || release.album_name,
+        artist_name: release["artist-credit"] ? release["artist-credit"][0].name : release.artist_name,
+        cover_art_url: coverArtUrl,
+      }) : null;
+
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          album_id: release.id,
-          album_name: release.title,
-          artist_name: release["artist-credit"][0].name,
-          cover_art_url: coverArtUrl,
-        }),
+        body,
       });
 
       if (response.ok) {
-        setIsFavorite(true);
+        setIsFavorite(!isFavorite);
       } else {
-        console.error("Error saving favorite:", response.statusText);
+        console.error("Error toggling favorite:", response.statusText);
       }
     } catch (error) {
-      console.error("Error saving favorite:", error);
+      console.error("Error toggling favorite:", error);
     }
   };
 
@@ -88,18 +101,18 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
         coverArtUrl && (
           <img
             src={coverArtUrl}
-            alt={`${release.title} cover art`}
+            alt={`${release.title || release.album_name} cover art`}
             className="w-full h-64 object-cover rounded-md mb-4"
             onError={() => setCoverArtError(true)}
           />
         )
       )}
-      <h2 className="text-xl font-bold">{release.title}</h2>
+      <h2 className="text-xl font-bold">{release.title || release.album_name}</h2>
       <p className="text-gray-600">
         Artista:{" "}
         {release["artist-credit"] && release["artist-credit"].length > 0
           ? release["artist-credit"][0].name
-          : "Artista Desconhecido"}
+          : release.artist_name || "Artista Desconhecido"}
       </p>
       <p className="text-gray-600">Data de lançamento: {release.date}</p>
       <p className="text-gray-600">País: {release.country}</p>
@@ -109,11 +122,10 @@ export default function AlbumCard({ release, favorites }: AlbumCardProps) {
         </p>
       )}
       <button
-        onClick={handleSaveFavorite}
-        className={`mt-4 px-4 py-2 rounded ${isFavorite ? 'bg-gray-300' : 'bg-indigo-600 text-white'} `}
-        disabled={isFavorite}
+        onClick={handleToggleFavorite}
+        className="mt-4 px-4 py-2"
       >
-        {isFavorite ? "Favorited" : "Save to Favorites"}
+        {isFavorite ? <HeartIconSolid className="h-6 w-6 text-indigo-600" /> : <HeartIconOutline className="h-6 w-6 text-indigo-600" />}
       </button>
     </div>
   );
