@@ -61,7 +61,6 @@ export async function fetchUserProfile() {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log("RESPONSE ", response);
 
   if (!response.ok) {
     throw new Error("Failed to fetch user profile");
@@ -82,7 +81,6 @@ export default function Profile() {
       if (isAuthenticated) {
         try {
           const data = await fetchUserProfile();
-          console.log("Data", data);
           setUser(data);
         } catch (err: any) {
           setError(err.message);

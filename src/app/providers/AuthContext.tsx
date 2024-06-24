@@ -35,7 +35,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Aquit Deu ruim");
       }
 
       const data = await response.json();
@@ -45,9 +46,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Login failed:", error);
       setIsAuthenticated(false);
+      throw error;
     }
   };
-
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);

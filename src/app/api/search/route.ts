@@ -35,7 +35,6 @@ export async function GET(req: Request) {
   }
 
   try {
-    console.log(`Fetching album: ${album}`);
     const response = await fetchWithRetry(
       `https://musicbrainz.org/ws/2/release/?query=release:${album}&fmt=json`,
       {
@@ -45,10 +44,7 @@ export async function GET(req: Request) {
       },
     );
 
-    console.log(`Response status: ${response.status}`);
     const data = await response.json();
-
-    console.log("Response data:", data);
 
     if (!response.ok) {
       console.error("Error fetching from MusicBrainz:", data);
