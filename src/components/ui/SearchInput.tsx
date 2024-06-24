@@ -13,13 +13,15 @@ export default function SearchInput() {
   const handleSearch = async () => {
     if (album.trim() === "") return;
 
+    // Clear previous results
+    sessionStorage.removeItem("searchResults");
+
     try {
       const response = await fetch(
         `/api/search?album=${encodeURIComponent(album)}`,
       );
       if (response.ok) {
         const data = await response.json();
-        console.log("RELEASES RESPONSE", data);
 
         sessionStorage.setItem("searchResults", JSON.stringify(data));
         window.dispatchEvent(new Event("storageUpdate"));
@@ -36,6 +38,7 @@ export default function SearchInput() {
       console.error("Error fetching data:", error);
     }
   };
+
   return (
     <div>
       <div className="mt-2 flex rounded-md shadow-sm">

@@ -1,14 +1,15 @@
 "use client";
 
 import { useAuth } from "@/app/providers/AuthContext";
-import { Release } from "@/lib/interfaces";
+import { PythonRelease, Release } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 
 interface AlbumCardProps {
   release: Release;
+  favorites: PythonRelease[];
 }
 
-export default function AlbumCard({ release }: AlbumCardProps) {
+export default function AlbumCard({ release, favorites }: AlbumCardProps) {
   const { isAuthenticated } = useAuth();
   const [coverArtUrl, setCoverArtUrl] = useState<string | null>(null);
   const [coverArtError, setCoverArtError] = useState<boolean>(false);
@@ -36,6 +37,10 @@ export default function AlbumCard({ release }: AlbumCardProps) {
     fetchCoverArt();
   }, [release.id]);
 
+  useEffect(() => {
+    const isFavorited = favorites.some(fav => fav.album_id === release.id);
+    setIsFavorite(isFavorited);
+  }, [favorites, release.id]);
 
   const handleSaveFavorite = async () => {
     if (!isAuthenticated) {
